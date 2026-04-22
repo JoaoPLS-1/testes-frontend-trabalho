@@ -64,9 +64,21 @@ describe('CheckoutForm', () => {
 
   it('chama onSubmit com os dados corretos quando o formulário é válido', async () => {
     // TODO: renderize o CheckoutForm com um mock para onSubmit
+    const mockOnSubmit = jest.fn()
+    render(<CheckoutForm onSubmit={mockOnSubmit} />)
     // preencha os três campos com dados válidos
+    await userEvent.type(screen.getByLabelText('E-mail'), 'aluno@test.com')
+    await userEvent.type(screen.getByLabelText('CEP'), '12344567')
+    await userEvent.type(screen.getByLabelText('Nome'), 'João Pedro')
     // clique em "Finalizar Compra"
+    await userEvent.click(screen.getByRole('button', {name: /Finalizar Compra/i}))
     // e verifique que onSubmit foi chamado com o objeto { nome, email, cep }
+    expect(mockOnSubmit).toHaveBeenCalledWith({
+      nome: "João Pedro",
+      cep: "12344567",
+      email: "aluno@test.com"
+      
+    })
   })
 
   it('não chama onSubmit quando há erros de validação', async () => {
@@ -76,5 +88,6 @@ describe('CheckoutForm', () => {
     await userEvent.click(screen.getByRole('button', { name: /finalizar/i }))
 
     // TODO: verifique que onSubmit *não* foi chamado
+    expect(onSubmit).not.toHaveBeenCalled()
   })
 })
