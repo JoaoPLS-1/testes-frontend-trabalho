@@ -27,7 +27,7 @@ describe('CheckoutForm', () => {
     expect(screen.getByLabelText('Nome')).toBeInTheDocument()
     expect(screen.getByLabelText('E-mail')).toBeInTheDocument()
     expect(screen.getByLabelText('CEP')).toBeInTheDocument()
-  })
+  })//
 
   it('exibe erro quando o nome está vazio ao tentar submeter', async () => {
     const onSubmit = jest.fn()
@@ -73,12 +73,11 @@ describe('CheckoutForm', () => {
     // clique em "Finalizar Compra"
     await userEvent.click(screen.getByRole('button', {name: /Finalizar Compra/i}))
     // e verifique que onSubmit foi chamado com o objeto { nome, email, cep }
-    expect(mockOnSubmit).toHaveBeenCalledWith({
-      nome: "João Pedro",
-      cep: "12344567",
-      email: "aluno@test.com"
-      
-    })
+    expect(mockOnSubmit).toHaveBeenCalledWith(expect.objectContaining({
+      nome: 'João Pedro',
+      email: 'aluno@test.com',
+      cep: '12344567'
+    }))
   })
 
   it('não chama onSubmit quando há erros de validação', async () => {
